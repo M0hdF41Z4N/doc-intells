@@ -28,7 +28,7 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Annotated, Any, Dict, List, Sequence
+from typing import Annotated, Any, Dict, List, Sequence, TypedDict
 
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 from langgraph.graph import END, StateGraph
@@ -69,21 +69,18 @@ _EMPTY_RESULT_SIGNALS = {
 # ---------------------------------------------------------------------------
 
 
-class AgentState(dict):
+class AgentState(TypedDict):
     """
     Typed state dictionary shared across all graph nodes.
-
-    Keys
-    ----
-    messages        : conversation history
-    original_query  : the raw user question
-    sub_queries     : output of QueryDecomposer
-    execution_plan  : list of ExecutionStep dicts
-    evidence        : accumulated evidence strings from all tool calls
-    citations       : structured citation objects {page, text}
-    final_answer    : synthesised answer string
-    trace_log       : per-request observability log
     """
+    messages: List[BaseMessage]
+    original_query: str
+    sub_queries: List[Dict[str, Any]]
+    execution_plan: List[Dict[str, Any]]
+    evidence: List[str]
+    citations: List[Dict[str, Any]]
+    final_answer: str
+    trace_log: List[str]
 
 
 # ---------------------------------------------------------------------------

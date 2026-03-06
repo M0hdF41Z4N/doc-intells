@@ -74,12 +74,15 @@ class VectorStorage:
                 )]
             )
             
-        results = self.client.search(
+        # In qdrant-client 1.17+ 'search' may be renamed to 'query_points' or similar
+        # in some configurations. Based on dir() inspection, 'query_points' is present.
+        response = self.client.query_points(
             collection_name=self.collection_name,
-            query_vector=query_vector,
+            query=query_vector,
             limit=top_k,
             query_filter=search_filter
         )
+        results = response.points
         
         return [
             {

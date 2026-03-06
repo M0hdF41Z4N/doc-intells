@@ -21,6 +21,9 @@ agent_instance = None
 async def startup_event():
     global agent_instance
     try:
+        from dotenv import load_dotenv
+        load_dotenv()
+        
         agent_builder = DocumentAgent()
         agent_instance = agent_builder.build()
         logger.info("Agent Graph Initialized Successfully")
@@ -48,7 +51,8 @@ async def execute_query(req: QueryRequest):
     initial_state = {
         "messages": [],
         "original_query": req.question,
-        "intent": "",
+        "sub_queries": [],
+        "execution_plan": [],
         "evidence": [],
         "citations": [],
         "final_answer": "",
